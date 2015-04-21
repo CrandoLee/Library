@@ -27,6 +27,9 @@
     <ClCompile Include="FileUtil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DBUtil.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="User.h">
@@ -36,6 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="FileUtil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DBUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

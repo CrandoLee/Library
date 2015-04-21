@@ -2,6 +2,7 @@
 #include "User.h"
 #include "FileUtil.h"
 #include "Manager.h"
+#include "DBUtil.h"
 using namespace std;
 
 int main()
@@ -15,8 +16,8 @@ int main()
 	cout << "             ÇëÊäÈëÃÜÂë£º";
 	cin >> strUserPWD;
 	cout << endl;
-	FileUtil file;
-	user = file.ReadUser(strUserName, strUserPWD);
+	DBUtil dbUtil;
+	user = dbUtil.ReadUser(strUserName, strUserPWD);
 	if (user.GetUserID() > 0)
 	{
 		Manager manager;

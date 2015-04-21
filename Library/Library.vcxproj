@@ -64,12 +64,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DBUtil.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DBUtil.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="User.h" />
