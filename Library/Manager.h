@@ -7,6 +7,7 @@ class Manager:public User
 {
 public:
 	Manager();
+	Manager(User user);
 	~Manager();
 	void ShowMenu();
 };

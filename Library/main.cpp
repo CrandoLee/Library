@@ -3,6 +3,7 @@
 #include "FileUtil.h"
 #include "Manager.h"
 #include "DBUtil.h"
+#include "Student.h"
 using namespace std;
 
 int main()
@@ -18,10 +19,15 @@ int main()
 	cout << endl;
 	DBUtil dbUtil;
 	user = dbUtil.ReadUser(strUserName, strUserPWD);
-	if (user.GetUserID() > 0)
+	if (user.GetUserID() == 0)
 	{
-		Manager manager;
+		Manager manager(user);
 		manager.ShowMenu();
+	}
+	else
+	{
+		Student student;
+		student.ShowMenu();
 	}
 	cin.get();
 	cin.get();

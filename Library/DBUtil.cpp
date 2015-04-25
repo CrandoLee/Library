@@ -42,8 +42,8 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 		while (!m_pRecordset->EndOfFile)
 		{
 			nUserID = m_pRecordset->GetCollect("id");//这儿给字段编号和字段名都可以 
-			strName = m_pRecordset->GetCollect("name");
-			strPassWord = m_pRecordset->GetCollect("password");
+			strName = (const char*)_bstr_t(m_pRecordset->GetCollect("name"));
+			strPassWord = (const char*)_bstr_t(m_pRecordset->GetCollect("password"));
 			nRole = m_pRecordset->GetCollect("role");
 			if (strName == strUserName && strPassWord == strUserPWD)
 			{
