@@ -20,6 +20,8 @@ public:
 	string GetUserPWD();
 	void SetUserRole(int nRole);
 	int GetUserRole();
+
+	bool AddBook();
 	~User();
 private:
 	int m_nID;					    //用户ID
