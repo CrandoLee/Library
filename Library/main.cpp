@@ -20,7 +20,7 @@ int main()
 	cout << endl;
 	DBUtil dbUtil;
 	user = dbUtil.ReadUser(strUserName, strUserPWD);
-	if (user.GetUserID() == 0)
+	if (user.GetUserRole() == 1)
 	{
 		Manager manager(user);
 		manager.ShowMenu();
@@ -32,7 +32,7 @@ int main()
 			switch (command)
 			{
 			case 1:
-				Book book;
+				//Book book;
 				cout << "您选择的是新增图书功能：";
 				cout << "请输入图书名称：";
 			default:

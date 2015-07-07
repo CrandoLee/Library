@@ -1,8 +1,11 @@
-#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename("EOF", "EndOfFile") 
-#include <iostream>
-#include <iomanip> 
-#include "User.h"
 
+#include <Windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <mysql.h> 
+#include <iostream>
+#include "User.h"
 class DBUtil
 {
 public:
