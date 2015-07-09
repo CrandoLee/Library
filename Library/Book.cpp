@@ -72,12 +72,12 @@ void Book::SetPub(string strPub)
 	m_strPub = strPub;
 }
 
-time_t Book::GetInDate()
+string Book::GetInDate()
 {
 	return m_inDate;
 }
 
-void Book::SetInDate(time_t inDate)
+void Book::SetInDate(string inDate)
 {
 	m_inDate = inDate;
 }

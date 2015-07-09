@@ -18,8 +18,8 @@ public:
 	void SetISBN(string strISBN);
 	string GetPub();
 	void SetPub(string strPub);
-	time_t GetInDate();
-	void SetInDate(time_t inDate);
+	string GetInDate();
+	void SetInDate(string inDate);
 	int GetTotalNum();
 	void SetTotalNum(int nTotalNum);
 	int GetLeftNum();
@@ -31,7 +31,7 @@ private:
 	string m_strAuthor;			//作者
 	string m_strISBN;			//ISBN
 	string m_strPub;			//出版社
-	time_t m_inDate;			//入库日期
+	string m_inDate;			//入库日期
 	int    m_nTotalNum;			//总量
 	int    m_nLeftNum;			//余量
 };

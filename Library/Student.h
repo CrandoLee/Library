@@ -6,7 +6,6 @@ class Student:public User
 {
 public:
 	Student();
-	Student(User user);
 	~Student();
 	void ShowMenu();
 };

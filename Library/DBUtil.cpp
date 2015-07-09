@@ -83,9 +83,9 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 				if (j > 0)
 				{
 					sql_row = mysql_fetch_row(result);
-					user.SetUserID(atoi(sql_row[0]));
-					user.SetUserName(sql_row[1]);
-					user.SetUserRole(atoi(sql_row[3]));
+					user.m_nID =  atoi(sql_row[0]);
+					user.m_strName =   sql_row[1];
+					user.m_nRole =  atoi(sql_row[3]);
 				}
 
 				//fd = mysql_fetch_field(result);
@@ -114,53 +114,39 @@ bool DBUtil::addBook(Book book)
 	string strName = "";
 	string strPass = "";
 	time_t rawtime;
+	int res;
 	char szTime[64];
 	struct tm * timeinfo;
 	char szTotal[16];
 	char szLeftNum[16];
-	sprintf(szTotal, "%d", book.GetTotalNum());
-	sprintf(szLeftNum, "%d", book.GetLeftNum());
+
+//	sprintf(szTotal, "%d", book.GetTotalNum());
+//	sprintf(szLeftNum, "%d", book.GetLeftNum());
+
 	if (isOpen)
 	{
-		//获得时间
-		time(&rawtime);
-		timeUtil.TimeToStrng(rawtime, szTime);
-
-		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
-		sql += "insert into book values(null,'" + book.GetBookName() + "','" + book.GetAuthor() + "','" + book.GetISBN() + "','" + book.GetPub() + "','" + szTime + "', " + szTotal + ", " + szLeftNum + ")";
-		res = mysql_query(&myCont, sql.c_str());//查询
-		if (!res)
-		{
-			result = mysql_store_result(&myCont);//保存查询到的数据到result
-			if (result)
-			{
-				int i, j;
-				//cout << "number of result: " << (unsigned long)mysql_num_rows(result) << endl;
-				for (i = 0; fd = mysql_fetch_field(result); i++)//获取列名
-				{
-					strcpy_s(column[i], fd->name);
-				}
-				j = mysql_num_fields(result);
-
-				if (j > 0)
-				{
-					sql_row = mysql_fetch_row(result);
-					user.SetUserID(atoi(sql_row[0]));
-					user.SetUserName(sql_row[1]);
-					user.SetUserRole(atoi(sql_row[3]));
-				}
-
-				//fd = mysql_fetch_field(result);
-
-			}
-		}
-		else
-		{
-			cout << "query sql failed!" << endl;
-		}
+// 		//获得时间
+// 		time(&rawtime);
+// 		timeUtil.TimeToStrng(rawtime, szTime);
+// 
+// 		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+// 		sql += "insert into book values(null,'" + book.GetBookName() + "','" + book.GetAuthor() + "','" + book.GetISBN() + "','" + book.GetPub() + "','" + szTime + "', " + szTotal + ", " + szLeftNum + ")";
+// 		res = mysql_query(&myCont, sql.c_str());//查询
+// 
+// 		if (!res)
+// 		{
+// 			return true;
+// 		}
+// 		else
+// 		{
+// 			cout << "query sql failed!" << endl;
+// 		}
 	}
 	else
 	{
 		cout << "connect failed!" << endl;
 	}
+
+	return false;
+
 }

@@ -1,8 +1,7 @@
-
-#include <Windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <winsock.h>
 #include <mysql.h> 
 #include <iostream>
 #include "User.h"

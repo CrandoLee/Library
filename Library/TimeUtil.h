@@ -7,7 +7,7 @@ class TimeUtil
 public:
 	TimeUtil();
 	~TimeUtil();
-	void TimeToStrng(time_t time1, char *szTime);
+	void TimeToString(time_t time1, char *szTime);
 	time_t StringToTime(char * szTime);
 };
 

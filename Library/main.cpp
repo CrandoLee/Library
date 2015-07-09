@@ -19,10 +19,14 @@ int main()
 	cin >> strUserPWD;
 	cout << endl;
 	DBUtil dbUtil;
+	dbUtil.OpenDB();
 	user = dbUtil.ReadUser(strUserName, strUserPWD);
-	if (user.GetUserRole() == 1)
+	if (user.m_nRole == 1)
 	{
-		Manager manager(user);
+		Manager manager;
+		manager.m_nID = user.m_nRole;
+		manager.m_strName = user.m_strName;
+		manager.m_nRole = user.m_nRole;
 		manager.ShowMenu();
 		int command = -1;		//选择命令
 		while (1)
@@ -32,9 +36,8 @@ int main()
 			switch (command)
 			{
 			case 1:
-				//Book book;
-				cout << "您选择的是新增图书功能：";
-				cout << "请输入图书名称：";
+				manager.AddBook();
+				break;
 			default:
 				break;
 			}

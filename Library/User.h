@@ -1,9 +1,9 @@
-﻿/*
-	文件名：User.h
-	作者：Crando
-	功能：用户类
-	时间：2015-4-20
-*/
+﻿//=====================================================================
+//	文件名：User.h
+//	作者：Crando
+//	功能：用户类
+// 	时间：2015-4-20
+//=======================================================================
 
 #pragma once
 #include <string>
@@ -12,18 +12,8 @@ class User
 {
 public:
 	User();
-	void SetUserID(int nID);
-	int GetUserID();
-	void SetUserName(string sName);
-	string GetUserName();
-	void SetUserPWD(string sPassword);
-	string GetUserPWD();
-	void SetUserRole(int nRole);
-	int GetUserRole();
-
-	bool AddBook();
 	~User();
-private:
+public:
 	int m_nID;					    //用户ID
 	string m_strName;				//用户名
 	string m_strPassword;			//用户密码
