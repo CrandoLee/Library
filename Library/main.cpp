@@ -1,6 +1,5 @@
 #include <iostream>
 #include "User.h"
-#include "FileUtil.h"
 #include "Manager.h"
 #include "DBUtil.h"
 #include "Student.h"
@@ -11,11 +10,12 @@ int main()
 {
 	string strUserName = "";
 	string strUserPWD = "";
+	bool bIsLogin = false;
 	User user;
-	cout << "             请输入用户名：";
+	cout << "                      请输入用户名：";
 	cin >> strUserName;
 	cout << endl;
-	cout << "             请输入密码：";
+	cout << "                      请输入密码：";
 	cin >> strUserPWD;
 	cout << endl;
 	DBUtil dbUtil;
@@ -27,26 +27,59 @@ int main()
 		manager.m_nID = user.m_nRole;
 		manager.m_strName = user.m_strName;
 		manager.m_nRole = user.m_nRole;
-		manager.ShowMenu();
 		int command = -1;		//选择命令
-		while (1)
+		bIsLogin = true;
+		while (bIsLogin)
 		{
+			system("cls");
+			manager.ShowMenu();
 			cout << "请选择命令：";
 			cin >> command;
 			switch (command)
 			{
 			case 1:
-				manager.AddBook();
+				//选择新增图书
+				manager.AddBook();			
+				break;
+			case 0:
+				//选择退出登录
+				bIsLogin = false;
 				break;
 			default:
 				break;
 			}
 		}
+		cout << "您已退出登录，按任意键退出..." << endl;
 	}
 	else
 	{
 		Student student;
-		student.ShowMenu();
+		student.m_nID = user.m_nRole;
+		student.m_strName = user.m_strName;
+		student.m_nRole = user.m_nRole;
+		int command = -1;		//选择命令
+		bIsLogin = true;
+		while (bIsLogin)
+		{
+			system("cls");
+			student.ShowMenu();
+			cout << "请选择命令：";
+			cin >> command;
+			switch (command)
+			{
+			case 1:
+				//选择新增图书
+				//manager.AddBook();
+				break;
+			case 0:
+				//选择退出登录
+				bIsLogin = false;
+				break;
+			default:
+				break;
+			}
+		}
+		cout << "您已退出登录，按任意键退出..." << endl;
 	}
 	cin.get();
 	cin.get();

@@ -7,6 +7,7 @@
 #include "User.h"
 #include "Book.h"
 #include "TimeUtil.h"
+#pragma once
 class DBUtil
 {
 public:

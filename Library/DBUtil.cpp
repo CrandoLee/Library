@@ -44,13 +44,9 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 	User user;      
 	char column[32][32];
 	int res;
-	string sql = "";
-	string strName = "";
-	string strPass = "";
-	
+	string sql;
 	if (isOpen)
 	{
-		//cout << "connect succeed!" << endl;
 		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
 		sql += "select * from user where name='" + strUserName + "' and password='" + strUserPWD + "'";
 		res = mysql_query(&myCont, sql.c_str());//查询
@@ -108,45 +104,30 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 	return user;
 }
 
+//新增图书
 bool DBUtil::addBook(Book book)
 {
 	string sql = "";
-	string strName = "";
-	string strPass = "";
-	time_t rawtime;
 	int res;
-	char szTime[64];
-	struct tm * timeinfo;
 	char szTotal[16];
 	char szLeftNum[16];
-
-//	sprintf(szTotal, "%d", book.GetTotalNum());
-//	sprintf(szLeftNum, "%d", book.GetLeftNum());
+	sprintf(szTotal, "%d", book.GetTotalNum());
+	sprintf(szLeftNum, "%d",0);
 
 	if (isOpen)
 	{
-// 		//获得时间
-// 		time(&rawtime);
-// 		timeUtil.TimeToStrng(rawtime, szTime);
-// 
-// 		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
-// 		sql += "insert into book values(null,'" + book.GetBookName() + "','" + book.GetAuthor() + "','" + book.GetISBN() + "','" + book.GetPub() + "','" + szTime + "', " + szTotal + ", " + szLeftNum + ")";
-// 		res = mysql_query(&myCont, sql.c_str());//查询
-// 
-// 		if (!res)
-// 		{
-// 			return true;
-// 		}
-// 		else
-// 		{
-// 			cout << "query sql failed!" << endl;
-// 		}
+		//获得时间
+		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+		sql += "insert into book values(null,'" + book.GetBookName() + "','" + book.GetAuthor() + "','" + book.GetISBN() + "','" + book.GetPub() + "','" + book.GetInDate() + "', " + szTotal + ", " + szLeftNum + ")";
+		mysql_query(&myCont, sql.c_str());
+		cout << "新增图书成功" << endl;
 	}
 	else
 	{
 		cout << "connect failed!" << endl;
 	}
-
+	cin.get();
+	cin.get();
 	return false;
 
 }
