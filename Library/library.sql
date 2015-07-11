@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50531
 File Encoding         : 65001
 
-Date: 2015-07-08 08:15:51
+Date: 2015-07-11 21:07:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,11 +25,11 @@ CREATE TABLE `book` (
   `author` varchar(30) DEFAULT NULL,
   `isbn` varchar(30) DEFAULT NULL,
   `pub` varchar(30) DEFAULT NULL,
-  `inDate` datetime DEFAULT NULL,
+  `inDate` date DEFAULT NULL,
   `total` int(11) DEFAULT NULL,
   `left` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user

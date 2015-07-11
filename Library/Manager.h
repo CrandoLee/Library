@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <iostream>
+#include <vector>
+#include <iomanip>
 #include <time.h>
 #include "User.h"
 #include "Book.h"
@@ -15,7 +17,8 @@ public:
 	~Manager();
 	void ShowMenu();
 	bool AddBook();
-	bool DisplayBook();
+	bool DisplayAllBook();
+	bool QueryBook(string strBookName);
 	TimeUtil m_timeUtil;
 	DBUtil m_dbUtil;
 };

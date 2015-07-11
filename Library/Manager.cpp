@@ -16,8 +16,8 @@ void Manager::ShowMenu()
 	cout << "==========================欢迎使用图书馆后台管理系统：==========================" << endl;
 	cout << "                              1.新书录入" << endl;
 	cout << "                              2.图书查询" << endl;
-	cout << "                              3.图书查询" << endl;
-	cout << "                              4.查看仓库" << endl;
+	cout << "                              3.删除图书" << endl;
+	cout << "                              4.图书列表" << endl;
 	cout << "                              5.借阅记录" << endl;
 	cout << "                              6.借阅统计" << endl;
 	cout << "                              7.新增用户" << endl;
@@ -56,13 +56,59 @@ bool Manager::AddBook()
 	book.SetLeftNum(0);
 	book.SetInDate(szTime);
 
-	m_dbUtil.OpenDB();
-	m_dbUtil.addBook(book);
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+	m_dbUtil.AddBook(book);
 	return true;
 }
 
 //展示所有书籍
-bool Manager::DisplayBook()
+bool Manager::DisplayAllBook()
 {
+	vector<Book> books;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+	
+	m_dbUtil.DisplayAllBook(books);
+	vector<Book>::iterator vecIter;
+	cout << "ID     书名            作者           出版社       入库日期     馆藏数量   余量" << endl;
+	for (vecIter = books.begin(); vecIter != books.end(); vecIter ++)
+	{
+		//char szRecord[1024] = {0};
+		//sprintf(szRecord, "%3d  %7s", vecIter->GetBookID(), vecIter->GetBookName());
+		//sprintf(szRecord, "%3d    %7s    %5s    %11s    %11s    %10s    %2d    %2d", vecIter->GetBookID(), vecIter->GetBookName(), vecIter->GetAuthor(), vecIter->GetISBN(), vecIter->GetPub(), vecIter->GetInDate(), vecIter->GetTotalNum(), vecIter->GetLeftNum());
+		//cout << szRecord << endl;
+		cout << setiosflags(ios::left) << setw(4) << vecIter->GetBookID() << "  " << setw(14) << vecIter->GetBookName() << "  " << setw(10) << vecIter->GetAuthor() << "  " << setw(14) << vecIter->GetPub() << "  " << setw(14) << vecIter->GetInDate() << "  " << setw(8) << vecIter->GetTotalNum() << "  " << setw(3) << vecIter->GetLeftNum() << endl;
+	}
+	cin.get();
+	cin.get();
+	return true;
+}
+
+bool Manager::QueryBook(string strBookName)
+{
+	vector<Book> books;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+
+	m_dbUtil.SelectBookByName(strBookName, books);
+	vector<Book>::iterator vecIter;
+	cout << "ID     书名            作者           出版社       入库日期     馆藏数量   余量" << endl;
+	for (vecIter = books.begin(); vecIter != books.end(); vecIter++)
+	{
+		//char szRecord[1024] = {0};
+		//sprintf(szRecord, "%3d  %7s", vecIter->GetBookID(), vecIter->GetBookName());
+		//sprintf(szRecord, "%3d    %7s    %5s    %11s    %11s    %10s    %2d    %2d", vecIter->GetBookID(), vecIter->GetBookName(), vecIter->GetAuthor(), vecIter->GetISBN(), vecIter->GetPub(), vecIter->GetInDate(), vecIter->GetTotalNum(), vecIter->GetLeftNum());
+		//cout << szRecord << endl;
+		cout << setiosflags(ios::left) << setw(4) << vecIter->GetBookID() << "  " << setw(14) << vecIter->GetBookName() << "  " << setw(10) << vecIter->GetAuthor() << "  " << setw(14) << vecIter->GetPub() << "  " << setw(14) << vecIter->GetInDate() << "  " << setw(8) << vecIter->GetTotalNum() << "  " << setw(3) << vecIter->GetLeftNum() << endl;
+	}
+	cin.get();
+	cin.get();
 	return true;
 }

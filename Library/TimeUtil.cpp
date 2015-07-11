@@ -14,9 +14,8 @@ void TimeUtil::TimeToString(time_t time1, char *szTime)
 {
 	struct tm *tm1;
 	tm1 = localtime(&time1);
-	sprintf(szTime, "%4.4d-%2.2d-%2.2d %2.2d:%2.2d:%2.2d",
-		tm1->tm_year + 1900, tm1->tm_mon + 1, tm1->tm_mday,
-		tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
+	sprintf(szTime, "%4.4d-%2.2d-%2.2d",
+		tm1->tm_year + 1900, tm1->tm_mon + 1, tm1->tm_mday);
 }
 
 

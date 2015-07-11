@@ -29,6 +29,7 @@ int main()
 		manager.m_nRole = user.m_nRole;
 		int command = -1;		//选择命令
 		bIsLogin = true;
+		string strBookName = "";
 		while (bIsLogin)
 		{
 			system("cls");
@@ -40,6 +41,15 @@ int main()
 			case 1:
 				//选择新增图书
 				manager.AddBook();			
+				break;
+			case 2:
+				cout << endl;
+				cout << "请输入书名：";
+				cin >> strBookName;
+				manager.QueryBook(strBookName);
+				break;
+			case 4:
+				manager.DisplayAllBook();
 				break;
 			case 0:
 				//选择退出登录

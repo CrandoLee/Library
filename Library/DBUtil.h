@@ -4,6 +4,7 @@
 #include <winsock.h>
 #include <mysql.h> 
 #include <iostream>
+#include <vector>
 #include "User.h"
 #include "Book.h"
 #include "TimeUtil.h"
@@ -16,7 +17,9 @@ public:
 	bool OpenDB();
 	bool CloseDB();
 	User ReadUser(string strUserName, string strUserPWD);
-	bool addBook(Book book);
+	bool AddBook(Book book);
+	bool DisplayAllBook(vector<Book> &books);
+	bool SelectBookByName(string strBookName, vector<Book> &books);
 public:
 	string szUsername;			//”√ªß√˚
 	string szPswd;				//√‹¬Î
