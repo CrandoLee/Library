@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
+#include <ctype.h>
 #include <time.h>
 #include "User.h"
 #include "Book.h"
@@ -19,6 +21,7 @@ public:
 	bool AddBook();
 	bool DisplayAllBook();
 	bool QueryBook(string strBookName);
+	bool DeleteBook(int nBookId);
 	TimeUtil m_timeUtil;
 	DBUtil m_dbUtil;
 };

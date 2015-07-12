@@ -228,3 +228,84 @@ bool DBUtil::SelectBookByName(string strBookName, vector<Book> &books)
 	}
 	return true;
 }
+
+
+bool DBUtil::SelectBookById(int nBookId, Book &book)
+{
+	char column[32][32];
+	int res;
+	string sql;
+	char szBookId[5] = {0};
+	sprintf(szBookId, "%d", nBookId);
+	if (isOpen)
+	{
+		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+		sql += "select * from book where id=";
+		sql += szBookId;
+		res = mysql_query(&myCont, sql.c_str());//查询
+		if (!res)
+		{
+			result = mysql_store_result(&myCont);//保存查询到的数据到result
+			if (result)
+			{
+				int i;
+				while (sql_row = mysql_fetch_row(result))//获取具体的数据
+				{
+					book.SetBookID(atoi(sql_row[0]));
+					book.SetBookName(sql_row[1]);
+					book.SetAuthor(sql_row[2]);
+					book.SetISBN(sql_row[3]);
+					book.SetPub(sql_row[4]);
+					book.SetInDate(sql_row[5]);
+					book.SetTotalNum(atoi(sql_row[6]));
+					book.SetLeftNum(atoi(sql_row[7]));
+				}
+			}
+		}
+		else
+		{
+			cout << "query sql failed!" << endl;
+		}
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	if (result != NULL)
+	{
+		mysql_free_result(result);//释放结果资源
+	}
+	return true;
+}
+
+bool DeleteBookById(int nBookId);
+
+bool DBUtil::DeleteBookById(int nBookId)
+{
+	char column[32][32];
+	int res;
+	string sql;
+	char szBookId[5] = {0};
+	sprintf(szBookId, "%d", nBookId);
+	if (isOpen)
+	{
+		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+		sql += "delete from book where id=" ;
+		sql += szBookId;
+		res = mysql_query(&myCont, sql.c_str());//查询
+		if (!res)
+		{
+			cout << "删除成功！" << endl;
+		}
+		else
+		{
+			cout << "query sql failed!" << endl;
+		}
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+
+	return true;
+}

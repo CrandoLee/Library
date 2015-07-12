@@ -30,6 +30,7 @@ int main()
 		int command = -1;		//选择命令
 		bIsLogin = true;
 		string strBookName = "";
+		int nBookId = 0;
 		while (bIsLogin)
 		{
 			system("cls");
@@ -43,10 +44,14 @@ int main()
 				manager.AddBook();			
 				break;
 			case 2:
-				cout << endl;
 				cout << "请输入书名：";
 				cin >> strBookName;
 				manager.QueryBook(strBookName);
+				break;
+			case 3:
+				cout << "请输入要删除图书的ID" << endl;
+				cin >> nBookId;
+				manager.DeleteBook(nBookId);
 				break;
 			case 4:
 				manager.DisplayAllBook();

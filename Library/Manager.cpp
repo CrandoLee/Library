@@ -78,10 +78,7 @@ bool Manager::DisplayAllBook()
 	cout << "ID     书名            作者           出版社       入库日期     馆藏数量   余量" << endl;
 	for (vecIter = books.begin(); vecIter != books.end(); vecIter ++)
 	{
-		//char szRecord[1024] = {0};
-		//sprintf(szRecord, "%3d  %7s", vecIter->GetBookID(), vecIter->GetBookName());
-		//sprintf(szRecord, "%3d    %7s    %5s    %11s    %11s    %10s    %2d    %2d", vecIter->GetBookID(), vecIter->GetBookName(), vecIter->GetAuthor(), vecIter->GetISBN(), vecIter->GetPub(), vecIter->GetInDate(), vecIter->GetTotalNum(), vecIter->GetLeftNum());
-		//cout << szRecord << endl;
+
 		cout << setiosflags(ios::left) << setw(4) << vecIter->GetBookID() << "  " << setw(14) << vecIter->GetBookName() << "  " << setw(10) << vecIter->GetAuthor() << "  " << setw(14) << vecIter->GetPub() << "  " << setw(14) << vecIter->GetInDate() << "  " << setw(8) << vecIter->GetTotalNum() << "  " << setw(3) << vecIter->GetLeftNum() << endl;
 	}
 	cin.get();
@@ -89,6 +86,7 @@ bool Manager::DisplayAllBook()
 	return true;
 }
 
+//根据书名查询书籍
 bool Manager::QueryBook(string strBookName)
 {
 	vector<Book> books;
@@ -102,11 +100,57 @@ bool Manager::QueryBook(string strBookName)
 	cout << "ID     书名            作者           出版社       入库日期     馆藏数量   余量" << endl;
 	for (vecIter = books.begin(); vecIter != books.end(); vecIter++)
 	{
-		//char szRecord[1024] = {0};
-		//sprintf(szRecord, "%3d  %7s", vecIter->GetBookID(), vecIter->GetBookName());
-		//sprintf(szRecord, "%3d    %7s    %5s    %11s    %11s    %10s    %2d    %2d", vecIter->GetBookID(), vecIter->GetBookName(), vecIter->GetAuthor(), vecIter->GetISBN(), vecIter->GetPub(), vecIter->GetInDate(), vecIter->GetTotalNum(), vecIter->GetLeftNum());
-		//cout << szRecord << endl;
+
 		cout << setiosflags(ios::left) << setw(4) << vecIter->GetBookID() << "  " << setw(14) << vecIter->GetBookName() << "  " << setw(10) << vecIter->GetAuthor() << "  " << setw(14) << vecIter->GetPub() << "  " << setw(14) << vecIter->GetInDate() << "  " << setw(8) << vecIter->GetTotalNum() << "  " << setw(3) << vecIter->GetLeftNum() << endl;
+	}
+	cin.get();
+	cin.get();
+	return true;
+}
+
+//根据图书ID删除图书
+bool Manager::DeleteBook(int nBookId)
+{
+	Book book;
+	book.SetBookID(-1);
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+	m_dbUtil.SelectBookById(nBookId, book);
+	if (book.GetBookID() != -1)
+	{
+		cout << "ID     书名            作者           出版社       入库日期     馆藏数量   余量" << endl;
+		cout << setiosflags(ios::left) << setw(4) << book.GetBookID() << "  " << setw(14) << book.GetBookName() << "  " << setw(10) << book.GetAuthor() << "  " << setw(14) << book.GetPub() << "  " << setw(14) << book.GetInDate() << "  " << setw(8) << book.GetTotalNum() << "  " << setw(3) << book.GetLeftNum() << endl;
+
+		//询问是否删除
+		char chIsDelete = 'a';
+		cout << "删除这本书吗?n/y" << endl;
+		cin.get();
+		cin >> chIsDelete;	
+		while (true)
+		{
+			if (chIsDelete == 'y' || chIsDelete == 'Y')
+			{
+				m_dbUtil.DeleteBookById(nBookId);
+				break;
+			}
+			else if (chIsDelete == 'n' || chIsDelete == 'N')
+			{
+				cout << "已取消删除！";
+				break;
+			}
+			else
+			{
+				cout << "输入有误,请重新输入:";
+				cin.get();
+				cin >> chIsDelete;
+			}
+		}
+	}
+	else
+	{
+		cout << "没有找到ID为" << nBookId << "的书籍" << endl;
 	}
 	cin.get();
 	cin.get();

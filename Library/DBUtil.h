@@ -20,6 +20,8 @@ public:
 	bool AddBook(Book book);
 	bool DisplayAllBook(vector<Book> &books);
 	bool SelectBookByName(string strBookName, vector<Book> &books);
+	bool SelectBookById(int nBookId, Book &book);
+	bool DeleteBookById(int nBookId);
 public:
 	string szUsername;			//”√ªß√˚
 	string szPswd;				//√‹¬Î
