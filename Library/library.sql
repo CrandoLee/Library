@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50531
 File Encoding         : 65001
 
-Date: 2015-07-11 21:07:51
+Date: 2015-07-13 23:29:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,22 @@ CREATE TABLE `book` (
   `total` int(11) DEFAULT NULL,
   `left` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for borrowrecord
+-- ----------------------------
+DROP TABLE IF EXISTS `borrowrecord`;
+CREATE TABLE `borrowrecord` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `bookid` int(11) DEFAULT NULL,
+  `userid` int(11) DEFAULT NULL,
+  `borrowdate` date DEFAULT NULL,
+  `shouldreturndate` date DEFAULT NULL,
+  `returndate` date DEFAULT NULL,
+  `continue` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user

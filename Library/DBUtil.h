@@ -8,6 +8,7 @@
 #include "User.h"
 #include "Book.h"
 #include "TimeUtil.h"
+#include "BorrowRecord.h"
 #pragma once
 class DBUtil
 {
@@ -22,6 +23,7 @@ public:
 	bool SelectBookByName(string strBookName, vector<Book> &books);
 	bool SelectBookById(int nBookId, Book &book);
 	bool DeleteBookById(int nBookId);
+	bool AddBorrowRecord(BorrowRecord borrowRecord,int nLeft);
 public:
 	string szUsername;			//”√ªß√˚
 	string szPswd;				//√‹¬Î

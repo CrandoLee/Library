@@ -74,6 +74,8 @@ int main()
 		student.m_nRole = user.m_nRole;
 		int command = -1;		//选择命令
 		bIsLogin = true;
+		string strBookName = "";
+		int nBookId;
 		while (bIsLogin)
 		{
 			system("cls");
@@ -83,8 +85,16 @@ int main()
 			switch (command)
 			{
 			case 1:
-				//选择新增图书
-				//manager.AddBook();
+				//选择查询图书
+				cout << "请输入书名：";
+				cin >> strBookName;
+				student.QueryBook(strBookName);
+				break;
+			case 2:
+				//选择借书
+				cout << "请输入图书ID：";
+				cin >> nBookId;
+				student.BorrowBook(nBookId);
 				break;
 			case 0:
 				//选择退出登录

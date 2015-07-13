@@ -309,3 +309,32 @@ bool DBUtil::DeleteBookById(int nBookId)
 
 	return true;
 }
+
+bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord,int nLeft)
+{
+	string sql = "";
+	int res;
+	char szBookId[16];
+	char szUserId[16];
+	char szLeft[16];
+	sprintf(szBookId, "%d", borrowRecord.m_nBookId);
+	sprintf(szUserId, "%d", borrowRecord.m_nUserId);
+	sprintf(szLeft, "%d", nLeft - 1);
+	if (isOpen)
+	{
+		sql = sql + "insert into borrowrecord values(null," + szBookId + "," + szUserId + ",'" + borrowRecord.m_tBorrowDate + "','" + borrowRecord.m_tShouldReturnDate + "',NULL,0)";
+		mysql_query(&myCont, sql.c_str());
+
+		sql = "";
+
+		sql = sql + "update book set left=" + szLeft + " where id = " + szBookId;
+		mysql_query(&myCont, sql.c_str());
+		cout << "½èÔÄ³É¹¦!" << endl;
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	return false;
+
+}
