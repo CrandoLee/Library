@@ -327,7 +327,7 @@ bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord,int nLeft)
 
 		sql = "";
 
-		sql = sql + "update book set left=" + szLeft + " where id = " + szBookId;
+		sql = sql + "update book set book.left=" + szLeft + " where id = " + szBookId;
 		mysql_query(&myCont, sql.c_str());
 		cout << "½èÔÄ³É¹¦!" << endl;
 	}
