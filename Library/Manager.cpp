@@ -73,7 +73,7 @@ bool Manager::DisplayAllBook()
 		m_dbUtil.OpenDB();
 	}
 	
-	m_dbUtil.DisplayAllBook(books);
+	m_dbUtil.SelectAllBook(books);
 	vector<Book>::iterator vecIter;
 	cout << "ID     书名            作者           出版社       入库日期     馆藏数量   余量" << endl;
 	for (vecIter = books.begin(); vecIter != books.end(); vecIter ++)
@@ -151,6 +151,31 @@ bool Manager::DeleteBook(int nBookId)
 	else
 	{
 		cout << "没有找到ID为" << nBookId << "的书籍" << endl;
+	}
+	cin.get();
+	cin.get();
+	return true;
+}
+
+//展示所有书籍
+bool Manager::DiaplayAllBorrowRecord()
+{
+	vector<BorrowRecord> borrowRecords;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+
+	m_dbUtil.SelectAllBorrowRecord(borrowRecords);
+	User user;
+	Book book;
+	vector<BorrowRecord>::iterator vecIter;
+	cout << "ID       书名        借阅人    借阅日期       应还日期     还书日期   续借次数" << endl;
+	for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
+	{
+		user = m_dbUtil.SelectUserBuId(vecIter->m_nUserId);
+		m_dbUtil.SelectBookById(vecIter->m_nBookId, book);
+		cout << setiosflags(ios::left) << setw(4) << vecIter->m_nBorrowId << "  " << setw(14) << book.GetBookName() << "  " << setw(6) << user.m_strName << "  " << setw(13) << vecIter->m_tBorrowDate << "  " << setw(13) << vecIter->m_tShouldReturnDate << "  " << setw(13) << vecIter->m_tReturnDate << "  " << setw(3) << vecIter->m_nContinue << endl;
 	}
 	cin.get();
 	cin.get();

@@ -56,6 +56,9 @@ int main()
 			case 4:
 				manager.DisplayAllBook();
 				break;
+			case 5:
+				manager.DiaplayAllBorrowRecord();
+				break;
 			case 0:
 				//Ñ¡ÔñÍË³öµÇÂ¼
 				bIsLogin = false;

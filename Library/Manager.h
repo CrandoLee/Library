@@ -21,6 +21,7 @@ public:
 	bool DisplayAllBook();
 	bool QueryBook(string strBookName);
 	bool DeleteBook(int nBookId);
+	bool DiaplayAllBorrowRecord();
 	TimeUtil m_timeUtil;
 	DBUtil m_dbUtil;
 };

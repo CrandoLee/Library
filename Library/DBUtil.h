@@ -19,11 +19,13 @@ public:
 	bool CloseDB();
 	User ReadUser(string strUserName, string strUserPWD);
 	bool AddBook(Book book);
-	bool DisplayAllBook(vector<Book> &books);
+	bool SelectAllBook(vector<Book> &books);
 	bool SelectBookByName(string strBookName, vector<Book> &books);
 	bool SelectBookById(int nBookId, Book &book);
 	bool DeleteBookById(int nBookId);
 	bool AddBorrowRecord(BorrowRecord borrowRecord,int nLeft);
+	bool SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords);
+	User SelectUserBuId(int nUserId);
 public:
 	string szUsername;			//”√ªß√˚
 	string szPswd;				//√‹¬Î
