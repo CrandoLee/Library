@@ -12,15 +12,29 @@ int main()
 	string strUserPWD = "";
 	bool bIsLogin = false;
 	User user;
-	cout << "                      请输入用户名：";
+	cout << "                          请输入用户名：";
 	cin >> strUserName;
 	cout << endl;
-	cout << "                      请输入密码：";
+	cout << "                          请输入密码：";
 	cin >> strUserPWD;
 	cout << endl;
 	DBUtil dbUtil;
 	dbUtil.OpenDB();
 	user = dbUtil.ReadUser(strUserName, strUserPWD);
+	while (user.m_nID == -1)
+	{
+		cout << "用户名或者密码错误，请重新输入,按任意键继续..." << endl;
+		cin.get();
+		cin.get();
+		system("cls");
+		cout << "                          请输入用户名：";
+		cin >> strUserName;
+		cout << endl;
+		cout << "                          请输入密码：";
+		cin >> strUserPWD;
+		cout << endl;
+		user = dbUtil.ReadUser(strUserName, strUserPWD);
+	}
 	if (user.m_nRole == 1)
 	{
 		Manager manager;
@@ -98,6 +112,13 @@ int main()
 				cout << "请输入图书ID：";
 				cin >> nBookId;
 				student.BorrowBook(nBookId);
+				break;
+			case 3:
+				//归还图书
+				student.ReturnBook();
+				break;
+			case 4:
+				student.ShowMyBorrowRecord();
 				break;
 			case 0:
 				//选择退出登录

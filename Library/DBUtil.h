@@ -23,9 +23,11 @@ public:
 	bool SelectBookByName(string strBookName, vector<Book> &books);
 	bool SelectBookById(int nBookId, Book &book);
 	bool DeleteBookById(int nBookId);
-	bool AddBorrowRecord(BorrowRecord borrowRecord,int nLeft);
+	bool AddBorrowRecord(BorrowRecord borrowRecord);
+	bool FinishBorrowRecord(int nRecordId, int nBookId);
 	bool SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords);
-	User SelectUserBuId(int nUserId);
+	bool SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int nUserId, int nType);
+	User SelectUserById(int nUserId);
 public:
 	string szUsername;			//”√ªß√˚
 	string szPswd;				//√‹¬Î

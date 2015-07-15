@@ -53,7 +53,7 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 		if (!res)
 		{
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
-			if (result)
+			if (result->row_count > 0)
 			{
 				int i, j;
 				//cout << "number of result: " << (unsigned long)mysql_num_rows(result) << endl;
@@ -62,20 +62,7 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 					strcpy_s(column[i], fd->name);
 				}
 				j = mysql_num_fields(result);
-				// 				for (i = 0; i < j; i++)
-				// 				{
-				// 					printf("%s\t", column[i]);
-				// 				}
-				//				printf("\n");
-				// 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
-				// 				{
-				// 					for (i = 0; i < j; i++)
-				// 					{
-				// 						printf("%s\n", sql_row[i]);
-				// 					}
-				// 					printf("\n");
-				// 					
-				// 				}
+
 				if (j > 0)
 				{
 					sql_row = mysql_fetch_row(result);
@@ -83,9 +70,11 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 					user.m_strName = sql_row[1];
 					user.m_nRole = atoi(sql_row[3]);
 				}
-
-				//fd = mysql_fetch_field(result);
-
+			}
+			else
+			{
+				user.m_nID = -1;
+				return user;
 			}
 		}
 		else
@@ -277,7 +266,7 @@ bool DBUtil::SelectBookById(int nBookId, Book &book)
 	return true;
 }
 
-
+//根据ID删除图书
 bool DBUtil::DeleteBookById(int nBookId)
 {
 	char column[32][32];
@@ -308,7 +297,8 @@ bool DBUtil::DeleteBookById(int nBookId)
 	return true;
 }
 
-bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord,int nLeft)
+//新增借阅记录
+bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord)
 {
 	string sql = "";
 	int res;
@@ -317,7 +307,6 @@ bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord,int nLeft)
 	char szLeft[16];
 	sprintf(szBookId, "%d", borrowRecord.m_nBookId);
 	sprintf(szUserId, "%d", borrowRecord.m_nUserId);
-	sprintf(szLeft, "%d", nLeft - 1);
 	if (isOpen)
 	{
 		sql = sql + "insert into borrowrecord values(null," + szBookId + "," + szUserId + ",'" + borrowRecord.m_tBorrowDate + "','" + borrowRecord.m_tShouldReturnDate + "',NULL,0)";
@@ -325,7 +314,7 @@ bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord,int nLeft)
 
 		sql = "";
 
-		sql = sql + "update book set book.left=" + szLeft + " where id = " + szBookId;
+		sql = sql + "update book set book.left=book.left-1 where id = " + szBookId;
 		mysql_query(&myCont, sql.c_str());
 		cout << "借阅成功!" << endl;
 	}
@@ -338,55 +327,8 @@ bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord,int nLeft)
 }
 
 
-//搜索所有借阅记录
-bool DBUtil::SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords)
-{
-	char column[32][32];
-	int res;
-	string sql;
-	if (isOpen)
-	{
-		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
-		sql += "select * from borrowrecord";
-		res = mysql_query(&myCont, sql.c_str());//查询
-		if (!res)
-		{
-			result = mysql_store_result(&myCont);//保存查询到的数据到result
-			if (result)
-			{
-				int i;
-				while (sql_row = mysql_fetch_row(result))//获取具体的数据
-				{
-					BorrowRecord borrowRecord;
-					borrowRecord.m_nBorrowId = atoi(sql_row[0]);
-					borrowRecord.m_nBookId = atoi(sql_row[1]);
-					borrowRecord.m_nUserId = atoi(sql_row[2]);
-					borrowRecord.m_tBorrowDate = sql_row[3];
-					borrowRecord.m_tShouldReturnDate = sql_row[4];
-					borrowRecord.m_tReturnDate = (sql_row[5] == NULL?"":sql_row[5]);
-					borrowRecord.m_nContinue = atoi(sql_row[6]);
-					borrowRecords.push_back(borrowRecord);
-				}
-			}
-		}
-		else
-		{
-			cout << "query sql failed!" << endl;
-		}
-	}
-	else
-	{
-		cout << "connect failed!" << endl;
-	}
-	if (result != NULL)
-	{
-		mysql_free_result(result);//释放结果资源
-	}
-
-	return true;
-}
-
-User DBUtil::SelectUserBuId(int nUserId)
+//根据用户ID获得用户信息
+User DBUtil::SelectUserById(int nUserId)
 {
 	int res;
 	string sql;
@@ -426,4 +368,142 @@ User DBUtil::SelectUserBuId(int nUserId)
 		mysql_free_result(result);//释放结果资源
 	}
 	return user;
+}
+
+//查询所有借阅记录
+bool DBUtil::SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords)
+{
+	char column[32][32];
+	int res;
+	string sql;
+	if (isOpen)
+	{
+		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+		sql += "select * from borrowrecord";
+		res = mysql_query(&myCont, sql.c_str());//查询
+		if (!res)
+		{
+			result = mysql_store_result(&myCont);//保存查询到的数据到result
+			if (result)
+			{
+				int i;
+				while (sql_row = mysql_fetch_row(result))//获取具体的数据
+				{
+					BorrowRecord borrowRecord;
+					borrowRecord.m_nBorrowId = atoi(sql_row[0]);
+					borrowRecord.m_nBookId = atoi(sql_row[1]);
+					borrowRecord.m_nUserId = atoi(sql_row[2]);
+					borrowRecord.m_tBorrowDate = sql_row[3];
+					borrowRecord.m_tShouldReturnDate = sql_row[4];
+					borrowRecord.m_tReturnDate = (sql_row[5] == NULL ? "" : sql_row[5]);
+					borrowRecord.m_nContinue = atoi(sql_row[6]);
+					borrowRecords.push_back(borrowRecord);
+				}
+			}
+		}
+		else
+		{
+			cout << "query sql failed!" << endl;
+		}
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	if (result != NULL)
+	{
+		mysql_free_result(result);//释放结果资源
+	}
+
+	return true;
+}
+
+//查询某位用户的借阅记录 
+bool DBUtil::SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int nUserId, int nType)
+{
+	//nType=1表示选择未归还 nType=2表示选择全部
+	char column[32][32];
+	int res;
+	string sql;
+	char szUserId[8] = {0};
+	sprintf(szUserId, "%d", nUserId);
+	if (isOpen)
+	{
+		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+		sql = sql + "select * from borrowrecord where userid=" + szUserId;
+		res = mysql_query(&myCont, sql.c_str());//查询
+		if (!res)
+		{
+			result = mysql_store_result(&myCont);//保存查询到的数据到result
+			if (result)
+			{
+				int i;
+				while (sql_row = mysql_fetch_row(result))//获取具体的数据
+				{
+					//不等于空表示已经归还
+					if (nType == 1)
+					{
+						if (sql_row[5] != NULL)
+						{
+							continue;
+						}
+					}
+
+					BorrowRecord borrowRecord;
+					borrowRecord.m_nBorrowId = atoi(sql_row[0]);
+					borrowRecord.m_nBookId = atoi(sql_row[1]);
+					borrowRecord.m_nUserId = atoi(sql_row[2]);
+					borrowRecord.m_tBorrowDate = sql_row[3];
+					borrowRecord.m_tShouldReturnDate = sql_row[4];
+					borrowRecord.m_tReturnDate = (sql_row[5] == NULL ? "" : sql_row[5]);
+					borrowRecord.m_nContinue = atoi(sql_row[6]);
+					borrowRecords.push_back(borrowRecord);
+				}
+			}
+		}
+		else
+		{
+			cout << "query sql failed!" << endl;
+		}
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	if (result != NULL)
+	{
+		mysql_free_result(result);//释放结果资源
+	}
+
+	return true;
+}
+
+//归还书籍
+bool DBUtil::FinishBorrowRecord(int nRecordId,int nBookId)
+{
+	string sql = "";
+	int res;
+	char szRecordId[16];
+	char szBookId[16];
+	sprintf(szRecordId, "%d", nRecordId);
+	sprintf(szBookId, "%d", nBookId);
+	time_t tTemp = time(NULL);
+	char szTime[16] = { 0 };
+	timeUtil.TimeToString(tTemp, szTime);
+	if (isOpen)
+	{
+		sql = sql + "update borrowrecord set returndate='" + szTime + "' where id=" + szRecordId;
+		mysql_query(&myCont, sql.c_str());
+
+		sql = "";
+
+		sql = sql + "update book set book.left=book.left+1 where id = " + szBookId;
+		mysql_query(&myCont, sql.c_str());
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	return false;
+
 }

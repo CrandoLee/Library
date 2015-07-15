@@ -19,6 +19,8 @@ public:
 	void ShowMenu();
 	bool QueryBook(string strBookName);
 	bool BorrowBook(int nBookId);
+	bool ReturnBook();
+	bool ShowMyBorrowRecord();
 public:
 	TimeUtil m_timeUtil;
 	DBUtil m_dbUtil;

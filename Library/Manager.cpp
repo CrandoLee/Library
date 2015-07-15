@@ -157,7 +157,7 @@ bool Manager::DeleteBook(int nBookId)
 	return true;
 }
 
-//展示所有书籍
+//展示所有借阅记录
 bool Manager::DiaplayAllBorrowRecord()
 {
 	vector<BorrowRecord> borrowRecords;
@@ -173,7 +173,7 @@ bool Manager::DiaplayAllBorrowRecord()
 	cout << "ID       书名        借阅人    借阅日期       应还日期     还书日期   续借次数" << endl;
 	for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
 	{
-		user = m_dbUtil.SelectUserBuId(vecIter->m_nUserId);
+		user = m_dbUtil.SelectUserById(vecIter->m_nUserId);
 		m_dbUtil.SelectBookById(vecIter->m_nBookId, book);
 		cout << setiosflags(ios::left) << setw(4) << vecIter->m_nBorrowId << "  " << setw(14) << book.GetBookName() << "  " << setw(6) << user.m_strName << "  " << setw(13) << vecIter->m_tBorrowDate << "  " << setw(13) << vecIter->m_tShouldReturnDate << "  " << setw(13) << vecIter->m_tReturnDate << "  " << setw(3) << vecIter->m_nContinue << endl;
 	}

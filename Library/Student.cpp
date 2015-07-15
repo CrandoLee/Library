@@ -16,7 +16,7 @@ void Student::ShowMenu()
 	cout << "                              1.查询图书" << endl;
 	cout << "                              2.借阅图书" << endl;
 	cout << "                              3.归还图书" << endl;
-	cout << "                              4.查看借阅" << endl;
+	cout << "                              4.借阅记录" << endl;
 	cout << "                              0.退出登录" << endl;
 }
 
@@ -84,7 +84,7 @@ bool Student::BorrowBook(int nBookId)
 				borrowRecord.m_tShouldReturnDate = m_timeUtil.AddMonth(tTemp);
 				borrowRecord.m_tReturnDate = "";
 				borrowRecord.m_nContinue = 0;
-				m_dbUtil.AddBorrowRecord(borrowRecord, book.GetLeftNum());
+				m_dbUtil.AddBorrowRecord(borrowRecord);
 				break;
 			}
 			else if (chIsBorrow == 'n' || chIsBorrow == 'N')
@@ -103,6 +103,84 @@ bool Student::BorrowBook(int nBookId)
 	else
 	{
 		cout << "没有找到ID为" << nBookId << "的书籍" << endl;
+	}
+	cin.get();
+	cin.get();
+	return true;
+}
+
+//根据图书ID借阅书籍
+bool Student::ReturnBook()
+{
+	Book book;
+	User user;
+	book.SetBookID(-1);
+	vector<BorrowRecord> borrowRecords;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+	//展示还未归还的图书记录
+	m_dbUtil.SelectBorrowRecordByUserId(borrowRecords, m_nID, 1);
+	cout << "已下是没有归还的图书" << endl;
+	vector<BorrowRecord>::iterator vecIter;
+	cout << "ID       书名        借阅人    借阅日期       应还日期     还书日期   续借次数" << endl;
+	for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
+	{
+		user = m_dbUtil.SelectUserById(vecIter->m_nUserId);
+		m_dbUtil.SelectBookById(vecIter->m_nBookId, book);
+		cout << setiosflags(ios::left) << setw(4) << vecIter->m_nBorrowId << "  " << setw(14) << book.GetBookName() << "  " << setw(6) << user.m_strName << "  " << setw(13) << vecIter->m_tBorrowDate << "  " << setw(13) << vecIter->m_tShouldReturnDate << "  " << setw(13) << vecIter->m_tReturnDate << "  " << setw(3) << vecIter->m_nContinue << endl;
+	}
+	cout << "请选择要归还图书的记录ID" << endl;
+
+	//选择要还哪本书
+	int nRecordId;
+	cin >> nRecordId;
+	bool bIsFind = true;
+	while (bIsFind)
+	{
+		for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
+		{
+			if (nRecordId == vecIter->m_nBorrowId)
+			{
+				bIsFind = false;
+				break;
+			}
+		}
+		if (vecIter == borrowRecords.end())
+		{
+			cout << "您所输入的ID不在记录中，请重新输入:";
+			cin >> nRecordId;
+		}
+	}
+
+	m_dbUtil.FinishBorrowRecord(vecIter->m_nBorrowId, vecIter->m_nBookId);
+	cout << "还书成功!" << endl;
+	cin.get();
+	cin.get();
+	return true;
+}
+
+//展示个人借阅记录
+bool Student::ShowMyBorrowRecord()
+{
+	vector<BorrowRecord> borrowRecords;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+
+	m_dbUtil.SelectBorrowRecordByUserId(borrowRecords, m_nID, 2);
+	User user;
+	Book book;
+	cout << "已下是您的所有借阅记录:" << endl;
+	vector<BorrowRecord>::iterator vecIter;
+	cout << "ID       书名        借阅人    借阅日期       应还日期     还书日期   续借次数" << endl;
+	for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
+	{
+		user = m_dbUtil.SelectUserById(vecIter->m_nUserId);
+		m_dbUtil.SelectBookById(vecIter->m_nBookId, book);
+		cout << setiosflags(ios::left) << setw(4) << vecIter->m_nBorrowId << "  " << setw(14) << book.GetBookName() << "  " << setw(6) << user.m_strName << "  " << setw(13) << vecIter->m_tBorrowDate << "  " << setw(13) << vecIter->m_tShouldReturnDate << "  " << setw(13) << vecIter->m_tReturnDate << "  " << setw(3) << vecIter->m_nContinue << endl;
 	}
 	cin.get();
 	cin.get();
