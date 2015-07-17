@@ -28,6 +28,8 @@ public:
 	bool SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords);
 	bool SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int nUserId, int nType);
 	User SelectUserById(int nUserId);
+	bool AddUser(User user);
+	bool SelectAllUser(vector<User> &users);
 public:
 	string szUsername;			//”√ªß√˚
 	string szPswd;				//√‹¬Î

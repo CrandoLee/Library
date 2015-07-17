@@ -97,7 +97,6 @@ User DBUtil::ReadUser(string strUserName, string strUserPWD)
 bool DBUtil::AddBook(Book book)
 {
 	string sql = "";
-	int res;
 	char szTotal[16];
 	char szLeftNum[16];
 	sprintf(szTotal, "%d", book.GetTotalNum());
@@ -109,7 +108,6 @@ bool DBUtil::AddBook(Book book)
 		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
 		sql += "insert into book values(null,'" + book.GetBookName() + "','" + book.GetAuthor() + "','" + book.GetISBN() + "','" + book.GetPub() + "','" + book.GetInDate() + "', " + szTotal + ", " + szLeftNum + ")";
 		mysql_query(&myCont, sql.c_str());
-		cout << "新增图书成功" << endl;
 	}
 	else
 	{
@@ -124,7 +122,6 @@ bool DBUtil::AddBook(Book book)
 //搜索所有图书
 bool DBUtil::SelectAllBook(vector<Book> &books)
 {
-	char column[32][32];
 	int res;
 	string sql;
 	if (isOpen)
@@ -137,7 +134,6 @@ bool DBUtil::SelectAllBook(vector<Book> &books)
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
 			if (result)
 			{
-				int i;
 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
 				{
 					Book book;
@@ -173,7 +169,6 @@ bool DBUtil::SelectAllBook(vector<Book> &books)
 //根据书名查询书籍
 bool DBUtil::SelectBookByName(string strBookName, vector<Book> &books)
 {
-	char column[32][32];
 	int res;
 	string sql;
 	if (isOpen)
@@ -186,7 +181,6 @@ bool DBUtil::SelectBookByName(string strBookName, vector<Book> &books)
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
 			if (result)
 			{
-				int i;
 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
 				{
 					Book book;
@@ -269,7 +263,6 @@ bool DBUtil::SelectBookById(int nBookId, Book &book)
 //根据ID删除图书
 bool DBUtil::DeleteBookById(int nBookId)
 {
-	char column[32][32];
 	int res;
 	string sql;
 	char szBookId[5] = {0};
@@ -301,10 +294,8 @@ bool DBUtil::DeleteBookById(int nBookId)
 bool DBUtil::AddBorrowRecord(BorrowRecord borrowRecord)
 {
 	string sql = "";
-	int res;
 	char szBookId[16];
 	char szUserId[16];
-	char szLeft[16];
 	sprintf(szBookId, "%d", borrowRecord.m_nBookId);
 	sprintf(szUserId, "%d", borrowRecord.m_nUserId);
 	if (isOpen)
@@ -346,7 +337,6 @@ User DBUtil::SelectUserById(int nUserId)
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
 			if (result)
 			{
-				int i;
 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
 				{
 					user.m_nID = nUserId;
@@ -373,7 +363,6 @@ User DBUtil::SelectUserById(int nUserId)
 //查询所有借阅记录
 bool DBUtil::SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords)
 {
-	char column[32][32];
 	int res;
 	string sql;
 	if (isOpen)
@@ -386,7 +375,6 @@ bool DBUtil::SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords)
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
 			if (result)
 			{
-				int i;
 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
 				{
 					BorrowRecord borrowRecord;
@@ -422,7 +410,6 @@ bool DBUtil::SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords)
 bool DBUtil::SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int nUserId, int nType)
 {
 	//nType=1表示选择未归还 nType=2表示选择全部
-	char column[32][32];
 	int res;
 	string sql;
 	char szUserId[8] = {0};
@@ -437,7 +424,6 @@ bool DBUtil::SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
 			if (result)
 			{
-				int i;
 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
 				{
 					//不等于空表示已经归还
@@ -482,7 +468,6 @@ bool DBUtil::SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int
 bool DBUtil::FinishBorrowRecord(int nRecordId,int nBookId)
 {
 	string sql = "";
-	int res;
 	char szRecordId[16];
 	char szBookId[16];
 	sprintf(szRecordId, "%d", nRecordId);
@@ -506,4 +491,64 @@ bool DBUtil::FinishBorrowRecord(int nRecordId,int nBookId)
 	}
 	return false;
 
+}
+
+//增加用户
+bool DBUtil::AddUser(User user)
+{
+	string sql = "";
+	char szRoleType[16];
+	sprintf(szRoleType, "%d", user.m_nRole);
+
+	if (isOpen)
+	{
+		sql += "insert into user values(null,'" + user.m_strName + "','" + user.m_strPassword + "'," + szRoleType + ")";
+		mysql_query(&myCont, sql.c_str());
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	return true;
+}
+
+//查询所有用户
+bool DBUtil::SelectAllUser(vector<User> &users)
+{
+	int res;
+	string sql;
+	if (isOpen)
+	{
+		mysql_query(&myCont, "SET NAMES GBK"); //设置编码格式,否则在cmd下无法显示中文
+		sql += "select * from user";
+		res = mysql_query(&myCont, sql.c_str());//查询
+		if (!res)
+		{
+			result = mysql_store_result(&myCont);//保存查询到的数据到result
+			if (result)
+			{
+				while (sql_row = mysql_fetch_row(result))//获取具体的数据
+				{
+					User user;
+					user.m_nID = atoi(sql_row[0]);
+					user.m_strName = sql_row[1];
+					user.m_nRole = atoi(sql_row[3]); 
+					users.push_back(user);
+				}
+			}
+		}
+		else
+		{
+			cout << "query sql failed!" << endl;
+		}
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	if (result != NULL)
+	{
+		mysql_free_result(result);//释放结果资源
+	}
+	return true;
 }

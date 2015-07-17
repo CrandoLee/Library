@@ -73,6 +73,12 @@ int main()
 			case 5:
 				manager.DiaplayAllBorrowRecord();
 				break;
+			case 6:
+				manager.AddUser();
+				break;
+			case 7:
+				manager.DisplayAllUser();
+				break;
 			case 0:
 				//Ñ¡ÔñÍË³öµÇÂ¼
 				bIsLogin = false;

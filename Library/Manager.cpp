@@ -19,22 +19,19 @@ void Manager::ShowMenu()
 	cout << "                              3.删除图书" << endl;
 	cout << "                              4.图书列表" << endl;
 	cout << "                              5.借阅记录" << endl;
-	cout << "                              6.借阅统计" << endl;
-	cout << "                              7.新增用户" << endl;
-	cout << "                              8.查询用户" << endl;
+	cout << "                              6.新增用户" << endl;
+	cout << "                              7.用户列表" << endl;
 	cout << "                              0.退出登录" << endl;
 }
 
 bool Manager::AddBook()
 {
-	int id;
 	string bookName;
 	string author;
 	string isbn;
 	string pub;
 	int total;
 	char szTime[32] = {0};
-	struct tm *ptr;
 	time_t lt;
 	lt = time(NULL);
 	m_timeUtil.TimeToString(lt, szTime);
@@ -61,6 +58,7 @@ bool Manager::AddBook()
 		m_dbUtil.OpenDB();
 	}
 	m_dbUtil.AddBook(book);
+	cout << "新增图书成功" << endl;
 	return true;
 }
 
@@ -176,6 +174,52 @@ bool Manager::DiaplayAllBorrowRecord()
 		user = m_dbUtil.SelectUserById(vecIter->m_nUserId);
 		m_dbUtil.SelectBookById(vecIter->m_nBookId, book);
 		cout << setiosflags(ios::left) << setw(4) << vecIter->m_nBorrowId << "  " << setw(14) << book.GetBookName() << "  " << setw(6) << user.m_strName << "  " << setw(13) << vecIter->m_tBorrowDate << "  " << setw(13) << vecIter->m_tShouldReturnDate << "  " << setw(13) << vecIter->m_tReturnDate << "  " << setw(3) << vecIter->m_nContinue << endl;
+	}
+	cin.get();
+	cin.get();
+	return true;
+}
+
+//增加用户
+bool Manager::AddUser()
+{
+	cout << "请输入一下用户信息:" << endl;
+	cout << "用户名   密码   用户类型" << endl;
+	User user;
+
+	cin >> user.m_strName;
+	cin >> user.m_strPassword;
+	cin >> user.m_nRole;
+
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+
+	m_dbUtil.AddUser(user);
+	cout << "新增用户成功" << endl;
+	cin.get();
+	cin.get();
+	return true;
+}
+
+//展示所有用户
+bool Manager::DisplayAllUser()
+{
+	vector<User> users;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+
+	m_dbUtil.SelectAllUser(users);
+	User user;
+	Book book;
+	vector<User>::iterator vecIter;
+	cout << "ID     用户名      身份" << endl;
+	for (vecIter = users.begin(); vecIter != users.end(); vecIter++)
+	{
+		cout << setiosflags(ios::left) << setw(6) << vecIter->m_nID << "  " << setw(8) << vecIter->m_strName << "  " << (vecIter->m_nRole == 1 ? "管理员" : "学生") << endl;
 	}
 	cin.get();
 	cin.get();
