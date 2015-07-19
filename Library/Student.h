@@ -21,6 +21,7 @@ public:
 	bool BorrowBook(int nBookId);
 	bool ReturnBook();
 	bool ShowMyBorrowRecord();
+	bool RenewBook();
 public:
 	TimeUtil m_timeUtil;
 	DBUtil m_dbUtil;

@@ -126,6 +126,9 @@ int main()
 			case 4:
 				student.ShowMyBorrowRecord();
 				break;
+			case 5:
+				student.RenewBook();
+				break;
 			case 0:
 				//Ñ¡ÔñÍË³öµÇÂ¼
 				bIsLogin = false;

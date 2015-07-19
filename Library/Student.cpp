@@ -17,6 +17,7 @@ void Student::ShowMenu()
 	cout << "                              2.借阅图书" << endl;
 	cout << "                              3.归还图书" << endl;
 	cout << "                              4.借阅记录" << endl;
+	cout << "                              5.续借图书" << endl;
 	cout << "                              0.退出登录" << endl;
 }
 
@@ -173,7 +174,7 @@ bool Student::ShowMyBorrowRecord()
 	m_dbUtil.SelectBorrowRecordByUserId(borrowRecords, m_nID, 2);
 	User user;
 	Book book;
-	cout << "已下是您的所有借阅记录:" << endl;
+	cout << "以下是您的所有借阅记录:" << endl;
 	vector<BorrowRecord>::iterator vecIter;
 	cout << "ID       书名        借阅人    借阅日期       应还日期     还书日期   续借次数" << endl;
 	for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
@@ -185,4 +186,75 @@ bool Student::ShowMyBorrowRecord()
 	cin.get();
 	cin.get();
 	return true;
+}
+
+//续借图书
+bool Student::RenewBook()
+{
+	Book book;
+	User user;
+	book.SetBookID(-1);
+	vector<BorrowRecord> borrowRecords;
+	if (!m_dbUtil.isOpen)
+	{
+		m_dbUtil.OpenDB();
+	}
+	//展示还未归还的图书记录
+	m_dbUtil.SelectBorrowRecordByUserId(borrowRecords, m_nID, 1);
+	cout << "以下是没有归还的图书" << endl;
+	vector<BorrowRecord>::iterator vecIter;
+	cout << "ID       书名        借阅人    借阅日期       应还日期     还书日期   续借次数" << endl;
+	for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
+	{
+		user = m_dbUtil.SelectUserById(vecIter->m_nUserId);
+		m_dbUtil.SelectBookById(vecIter->m_nBookId, book);
+		cout << setiosflags(ios::left) << setw(4) << vecIter->m_nBorrowId << "  " << setw(14) << book.GetBookName() << "  " << setw(6) << user.m_strName << "  " << setw(13) << vecIter->m_tBorrowDate << "  " << setw(13) << vecIter->m_tShouldReturnDate << "  " << setw(13) << vecIter->m_tReturnDate << "  " << setw(3) << vecIter->m_nContinue << endl;
+	}
+	cout << "请选择要归还图书的记录ID" << endl;
+
+	//选择要续借哪本书
+	int nRecordId;
+	cin >> nRecordId;
+	bool bIsNotFind = true;
+	bool bCanContinue = false;
+	while (bIsNotFind)
+	{
+		for (vecIter = borrowRecords.begin(); vecIter != borrowRecords.end(); vecIter++)
+		{
+			if (nRecordId == vecIter->m_nBorrowId)
+			{
+				bIsNotFind = false;
+				if (vecIter->m_nContinue > 0)
+				{
+					bCanContinue = false;
+				}
+				else
+				{
+					bCanContinue = true;
+				}
+
+				break;
+			}
+		}
+		if (vecIter == borrowRecords.end())
+		{
+			cout << "您所输入的ID不在记录中，请重新输入:";
+			cin >> nRecordId;
+		}
+	}
+
+	if (true == bCanContinue)
+	{
+		m_dbUtil.ExtendBorrowRecord(nRecordId);
+		cout << "续借成功!" << endl;
+	}
+	else
+	{
+		cout << "此书籍已经续借过一次，无法再次续借" << endl;
+	}
+
+	cin.get();
+	cin.get();
+	return true;
+
 }

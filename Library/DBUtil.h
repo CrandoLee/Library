@@ -24,6 +24,8 @@ public:
 	bool SelectBookById(int nBookId, Book &book);
 	bool DeleteBookById(int nBookId);
 	bool AddBorrowRecord(BorrowRecord borrowRecord);
+	bool ExtendBorrowRecord(int nRecordId);
+	bool SelectBorrowRecordByRecordId(BorrowRecord &borrowRecord,int nRecordId);
 	bool FinishBorrowRecord(int nRecordId, int nBookId);
 	bool SelectAllBorrowRecord(vector<BorrowRecord> &borrowRecords);
 	bool SelectBorrowRecordByUserId(vector<BorrowRecord> &borrowRecords, int nUserId, int nType);

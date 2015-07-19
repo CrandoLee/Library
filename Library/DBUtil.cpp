@@ -230,7 +230,6 @@ bool DBUtil::SelectBookById(int nBookId, Book &book)
 			result = mysql_store_result(&myCont);//保存查询到的数据到result
 			if (result)
 			{
-				int i;
 				while (sql_row = mysql_fetch_row(result))//获取具体的数据
 				{
 					book.SetBookID(atoi(sql_row[0]));
@@ -489,7 +488,7 @@ bool DBUtil::FinishBorrowRecord(int nRecordId,int nBookId)
 	{
 		cout << "connect failed!" << endl;
 	}
-	return false;
+	return true;
 
 }
 
@@ -550,5 +549,69 @@ bool DBUtil::SelectAllUser(vector<User> &users)
 	{
 		mysql_free_result(result);//释放结果资源
 	}
+	return true;
+}
+
+//续借图书
+bool DBUtil::ExtendBorrowRecord(int nRecordId)
+{
+	string sql = "";
+	char szRecordId[16];
+	char szBookId[16];
+	sprintf(szRecordId, "%d", nRecordId);
+	time_t tTemp = time(NULL);
+	if (isOpen)
+	{
+		sql = sql + "update borrowrecord set shouldreturndate='" + timeUtil.AddMonth(tTemp) + "',borrowrecord.continue=borrowrecord.continue+1 where id=" + szRecordId;
+		mysql_query(&myCont, sql.c_str());
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	return true;
+}
+
+//根据ID查询借阅记录
+bool DBUtil::SelectBorrowRecordByRecordId(BorrowRecord &borrowRecord, int nRecordId)
+{
+	int res;
+	string sql;
+	char szRecordId[8] = { 0 };
+	sprintf(szRecordId, "%d", nRecordId);
+	if (isOpen)
+	{
+		sql = sql + "select * from borrowrecord where id=" + szRecordId;
+		res = mysql_query(&myCont, sql.c_str());//查询
+		if (!res)
+		{
+			result = mysql_store_result(&myCont);//保存查询到的数据到result
+			if (result)
+			{
+				sql_row = mysql_fetch_row(result);
+				borrowRecord.m_nBorrowId = atoi(sql_row[0]);
+				borrowRecord.m_nBookId = atoi(sql_row[1]);
+				borrowRecord.m_nUserId = atoi(sql_row[2]);
+				borrowRecord.m_tBorrowDate = sql_row[3];
+				borrowRecord.m_tShouldReturnDate = sql_row[4];
+				borrowRecord.m_tReturnDate = (sql_row[5] == NULL ? "" : sql_row[5]);
+				borrowRecord.m_nContinue = atoi(sql_row[6]);
+				
+			}
+		}
+		else
+		{
+			cout << "query sql failed!" << endl;
+		}
+	}
+	else
+	{
+		cout << "connect failed!" << endl;
+	}
+	if (result != NULL)
+	{
+		mysql_free_result(result);//释放结果资源
+	}
+
 	return true;
 }
